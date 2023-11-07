@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Sample E-commerce Store</title>
+    <script src="https://js.stripe.com/v3/"></script>
+    <style>
+        /* Basic styling for demonstration purposes */
+        /* ... (same styles as before) ... */
+    </style>
+</head>
+<body>
+
+<div class="product">
+    <!-- Product details -->
+</div>
+
+<div class="cart">
+    <!-- Cart details -->
+    <button class="checkout-btn" id="checkout-button">Checkout</button>
+</div>
+
+<script>
+    // This is a simple example to demonstrate the client-side integration with Stripe
+    let cart = [];
+    
+    // Function to add products to the cart
+    function addToCart(productName, price) {
+        cart.push({ name: productName, price: price });
+        showCart();
+    }
+    
+    // Function to display items in the cart
+    function showCart() {
+        // Display cart items and total price
+        // This section remains the same as in the previous example
+    }
+
+    // Create a checkout session with Stripe
+    document.getElementById('checkout-button').addEventListener('click', function() {
+        fetch('/create-checkout-session', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ cart: cart }),
+        })
+        .then(function(response) {
+            return response.json();
+        })
+        .then(function(session) {
+            return stripe.redirectToCheckout({ sessionId: session.id });
+        })
+        .then(function(result) {
+            if (result.error) {
+                alert(result.error.message);
+            }
+        })
+        .catch(function(error) {
+            console.error('Error:', error);
+        });
+    });
+</script>
+
+</body>
+</html>
